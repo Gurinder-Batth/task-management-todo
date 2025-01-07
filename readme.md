@@ -17,8 +17,8 @@ Follow these steps to get your local environment set up.
 First, clone the repository to your local machine.
 
 ```bash
-git clone https://your-repository-url.git
-cd your-project-directory
+git clone https://github.com/Gurinder-Batth/task-management-todo
+cd task-management-todo
 ```
 
 ### 2. Set Up the Docker Environment
