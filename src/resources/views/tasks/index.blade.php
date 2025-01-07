@@ -8,10 +8,12 @@
 </div>
 
 <ul id="task-list" class="list-group">
-    @foreach($tasks as $task)
+    @foreach($tasks as $idx => $task)
     <li class="list-group-item d-flex justify-content-between align-items-center" data-id="{{ $task->id }}">
-        <span>{{ $task->name }}</span>
+        <span><span class="pnum">{{$loop->iteration}}</span>. {{ $task->name }}</span>
         <div>
+            <span>({{ $task->project->name }})</span> &nbsp
+            <span>{{ $task->created_at->diffForHumans() }}</span> &nbsp
             <button class="btn btn-sm btn-warning edit-task-btn" data-bs-toggle="modal" data-bs-target="#editTaskModal" data-id="{{ $task->id }}" data-name="{{ $task->name }}" data-project-id="{{ $task->project_id }}">Edit</button>
             <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
                 @csrf
@@ -118,9 +120,15 @@
     const sortable = new Sortable(taskList, {
         onEnd: function (evt) {
             const reorderedTaskIds = [];
-            taskList.querySelectorAll('li').forEach(item => {
+            taskList.querySelectorAll('li').forEach((item, index) => {
                 reorderedTaskIds.push(item.getAttribute('data-id'));
+                const priorityElement = item.querySelector('.pnum'); // Get the priority element
+                if (priorityElement) {
+                    // set priority index (assuming you're setting the content of the .pnum element)
+                    priorityElement.innerHTML = index + 1; // Set the priority index
+                }
             });
+
 
             // Send the reordered task IDs to the server via AJAX
             fetch("{{ route('tasks.reorder') }}", {
