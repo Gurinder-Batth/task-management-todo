@@ -1,0 +1,23 @@
+services:
+  app:
+    build:
+      context: ./docker/php
+    image: "laravel-img-1.0"
+    restart: unless-stopped
+    ports:
+      - 8001:80 # Laravel
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./docker/apache/ports.conf:/etc/apache2/ports.conf
+
+  db:
+    image: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+      MYSQL_DATABASE: "laravel"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+    volumes:
+      - ./docker/laraveldb:/var/lib/mysql
